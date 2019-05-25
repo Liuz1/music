@@ -1,0 +1,71 @@
+{% extends "title_base.html"  %}
+{% block title  %}
+{% load staticfiles %}
+<link type="image/x-icon" rel="shortcut icon" href="{% static "favicon.ico" %}">
+<link type="text/css" rel="stylesheet" href="{% static "css/common.css" %}">
+<link type="text/css" rel="stylesheet" href="{% static "css/user.css" %}">
+</head>
+
+<body class="member">
+    <div class="header">
+        <a href="/" class="logo" title="首页"><img src="{% static "image/logo.png" %}"></a>
+        <div class="search-box">
+            <form id="searchForm" action="{% url 'search' 1 %}" method="post" target="_blank">
+            {% csrf_token %}
+                <div class="search-keyword">
+                <input id="kword" name="kword" type="text" class="keyword" maxlength="120" placeholder="音乐节"/>
+                </div>
+                <input id="subSerch" type="submit" class="search-button" value="搜 索" />
+            </form>
+            <div id="suggest" class="search-suggest"></div>
+            <div class="search-hot-words">
+                {% for song in search_song  %}
+                    <a target="play" href="{% url 'play' song.song.song_id %}">{{ song.song.song_name }}</a>
+                {% endfor  %}
+            </div>
+        </div>
+    </div><!--end header-->
+
+	<div class="nav-box">
+		<div class="nav-box-inner">
+			<ul class="nav clearfix">
+				<li><a href="/">首页</a></li>
+				<li><a href="{% url 'ranking' %}" target="_blank">歌曲排行</a></li>
+	    	    <li><a href="{% url 'home' 1 %}" target="_blank">用户中心</a></li>
+			</ul>
+		</div>
+	</div><!--end nav-box-->
+
+	<div class="main main--profile" style="">
+
+		<div class="js_box" style="display: block;">
+			<div class="profile_cont">
+				<div class="js_sub" style="display: block;">
+					<div class="mod_songlist">
+						<ul class="songlist__header">
+							<li class="songlist__header_name">        </li>
+							<li class="songlist__header_author">您还不是会员，需要购买会员或者购买该歌曲才能试听或下载</li>
+							<li class="songlist__header_time">                 </li>
+						</ul>
+						<ul class="songlist__list">
+							<li>
+								<div class="songlist__item songlist__item--even">
+							    <div class="songlist__songname">
+                                    <form action="/page1/" method="POST">
+                                        {% csrf_token %}
+                                        <input type="text" name="money" value="298" readonly="readonly">
+                                        <input type="submit" value="购买会员" />
+                                    </form>
+							    </div>
+							    <div class="songlist__time">{{ item.song_time }}</div>
+								</div>
+							</li>
+						</ul>
+					</div><!--end mod_songlist-->
+
+				</div>
+			</div>
+		</div>
+    </div><!-- end main -->
+
+{% endblock  %}
